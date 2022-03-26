@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter, ViewEncapsulation, ViewChild, ElementRef } from '@angular/core';
+import { Component, Input, Output, EventEmitter, ViewEncapsulation, ViewChild, ElementRef, OnInit, ChangeDetectorRef } from '@angular/core';
 
 import { Message } from "../../core/message";
 import { MessageType } from "../../core/message-type.enum";
@@ -13,6 +13,7 @@ import { ChatParticipantType } from "../../core/chat-participant-type.enum";
 import { IChatParticipant } from "../../core/chat-participant";
 import { MessageCounter } from "../../core/message-counter";
 import { chatParticipantStatusDescriptor } from '../../core/chat-participant-status-descriptor';
+import { MessageStatusType } from '../../core/message-status';
 
 @Component({
     selector: 'ng-chat-window',
@@ -51,6 +52,9 @@ export class NgChatWindowComponent {
     public messageDatePipeFormat: string = "short";
 
     @Input()
+    public messageStatusType: MessageStatusType;
+    
+    @Input()
     public hasPagedHistory: boolean = true;
 
     @Output()
@@ -71,6 +75,9 @@ export class NgChatWindowComponent {
     @Output()
     public onLoadHistoryTriggered: EventEmitter<Window> = new EventEmitter();
 
+    @Output()
+    public onResendMessage: EventEmitter<Message> = new EventEmitter();
+    
     @ViewChild('chatMessages') chatMessages: any;
     @ViewChild('nativeFileInput') nativeFileInput: ElementRef;
     @ViewChild('chatWindowInput') chatWindowInput: any;
@@ -309,5 +316,9 @@ export class NgChatWindowComponent {
                     // TODO: Invoke a file upload adapter error here
                 });
         }
+    }
+
+    onRequestResendMessage(message: Message) {
+        this.onResendMessage.emit(message);
     }
 }

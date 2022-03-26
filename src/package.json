@@ -1,6 +1,6 @@
 {
-  "name": "ng-chat",
-  "version": "3.1.0",
+  "name": "zk-chat",
+  "version": "1.0.6",
   "peerDependencies": {
     "@angular/common": "*",
     "@angular/core": "*",
@@ -17,11 +17,11 @@
     "@angular/platform-browser": "^12.0.5",
     "gulp": "~4.0.2",
     "gulp-inline-ng2-template": "^5.0.1",
-    "ng-packagr": "^12.0.6",
+    "ng-packagr": "^12.2.7",
     "rollup": "^2.52.1",
     "rxjs": "^7.1.0",
     "tsickle": "^0.43.0",
-    "typescript": "~4.2.4",
+    "typescript": "~4.3.0",
     "uglify-js": "^3.13.9",
     "zone.js": "^0.11.4"
   },
@@ -38,17 +38,11 @@
     "build": "ng-packagr -p package.json",
     "build-package": "ng-packagr -p package.json && npm run copy-readme"
   },
-  "description": "A simple facebook/linkedin lookalike chat module for Angular applications.",
-  "author": "Rafael Carvalho",
+  "description": "An implementation of ng-chat lib",
   "license": "MIT",
-  "homepage": "https://github.com/rpaschoal/ng-chat",
-  "bugs": {
-    "url": "https://github.com/rpaschoal/ng-chat/issues"
-  },
   "ngPackage": {
     "lib": {
       "entryFile": "index.ts"
     }
-  },
-  "dependencies": {}
+  }
 }

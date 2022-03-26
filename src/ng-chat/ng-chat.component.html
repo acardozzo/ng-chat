@@ -31,12 +31,14 @@
             [showMessageDate]="showMessageDate"
             [messageDatePipeFormat]="messageDatePipeFormat"
             [hasPagedHistory]="hasPagedHistory"
+            [messageStatusType]="messageStatusType"
             (onMessagesSeen)="onWindowMessagesSeen($event)"
             (onMessageSent)="onWindowMessageSent($event)"
             (onTabTriggered)="onWindowTabTriggered($event)"
             (onChatWindowClosed)="onWindowChatClosed($event)"
             (onOptionTriggered)="onWindowOptionTriggered($event)"
             (onLoadHistoryTriggered)="fetchMessageHistory($event)"
+            (onResendMessage)="onWindowResendMessage($event)"
         >
         </ng-chat-window>
     </div>

@@ -8,4 +8,6 @@ export class Message
     public message: string;
     public dateSent?: Date;
     public dateSeen?: Date;
+    public status?: string;
+    public id?: string;
 }

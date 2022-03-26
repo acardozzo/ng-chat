@@ -25,10 +25,23 @@ export abstract class ChatAdapter
     {
         this.messageReceivedHandler(participant, message);
     }
+
+    public updateMessageStatus(chatId: string, message: Message)
+    {
+        this.updateMessageStatusHandler(chatId, message);
+    }
     
+    public addMessageToRoom(chatId: string, message: Message)
+    {
+        this.addMessageToRoomHandler(chatId, message);
+    }
     // Event handlers
     /** @internal */
     friendsListChangedHandler: (participantsResponse: ParticipantResponse[]) => void  = (participantsResponse: ParticipantResponse[]) => {};
     /** @internal */
     messageReceivedHandler: (participant: IChatParticipant, message: Message) => void = (participant: IChatParticipant, message: Message) => {};
+        /** @internal */
+    updateMessageStatusHandler: (chatId: string, message: Message) => void = (chatId, message) => {};
+    /** @internal */
+    addMessageToRoomHandler: (chatId: string, message: Message) => void = (chatId, message) => {};
 }

@@ -213,3 +213,23 @@
         position: initial;
     }
 }
+
+.status-button {
+    border:none;
+    background: transparent;
+    cursor: inherit;
+}
+
+.d-grid{
+    display: grid;
+}
+
+.btn-not-delivered {
+    text-align: right;
+}
+
+.btn-send-again {
+    color: #6ba0f7;
+    text-decoration: underline;
+    cursor: pointer !important;
+}
