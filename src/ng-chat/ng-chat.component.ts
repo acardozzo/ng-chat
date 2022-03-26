@@ -278,8 +278,8 @@ export class NgChat implements OnInit, IChatController {
         // Binding event listeners
         this.adapter.messageReceivedHandler = (participant, msg) =>
           this.onMessageReceived(participant, msg);
-        this.adapter.updateMessageStatusHandler = (chatId, message) =>
-          this.updateMessageStatus(chatId, message);
+        this.adapter.updateMessageStatusHandler = (participant, msg) =>
+          this.updateMessageStatus(participant, msg);
         // this.adapter.addMessageToRoomHandler = (chatId, message) =>
         //   this.addMessageToRoom(chatId, message);
         this.adapter.autoMessageHandler = (participant, msg) => this.onDispatcherAutoMessage(participant, msg);
@@ -885,8 +885,8 @@ export class NgChat implements OnInit, IChatController {
     this.adapter.sendMessage(message);
   }
 
-  updateMessageStatus(chatId: string, message: Message) {
-    const chatToUpdate = this.windows.find((x) => x.participant.id == chatId);
+  updateMessageStatus(participant: IChatParticipant, message: Message) {
+    const chatToUpdate = this.windows.find((x) => x.participant.id == participant.id);
     if (chatToUpdate) {
       const messageToUpdate = chatToUpdate.messages.find(
         (item) =>

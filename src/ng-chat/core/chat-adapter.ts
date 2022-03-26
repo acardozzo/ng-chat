@@ -26,15 +26,15 @@ export abstract class ChatAdapter
         this.messageReceivedHandler(participant, message);
     }
 
-    public updateMessageStatus(chatId: string, message: Message)
+    public updateMessageStatus(participant: IChatParticipant, message: Message): void
     {
-        this.updateMessageStatusHandler(chatId, message);
+        this.updateMessageStatusHandler(participant, message);
     }
     
-    public addMessageToRoom(chatId: string, message: Message)
-    {
-        this.addMessageToRoomHandler(chatId, message);
-    }
+    // public addMessageToRoom(chatId: string, message: Message)
+    // {
+    //     this.addMessageToRoomHandler(chatId, message);
+    // }
     public onDispatcherMessage(participant: IChatParticipant, message: Message): void {
         this.autoMessageHandler(participant, message);
     }
@@ -44,9 +44,9 @@ export abstract class ChatAdapter
     /** @internal */
     messageReceivedHandler: (participant: IChatParticipant, message: Message) => void = (participant: IChatParticipant, message: Message) => {};
         /** @internal */
-    updateMessageStatusHandler: (chatId: string, message: Message) => void = (chatId, message) => {};
+    updateMessageStatusHandler: (participant: IChatParticipant, message: Message) => void = (participant: IChatParticipant, message: Message) => {};
     /** @internal */
-    addMessageToRoomHandler: (chatId: string, message: Message) => void = (chatId, message) => {};
+    // addMessageToRoomHandler: (chatId: string, message: Message) => void = (chatId, message) => {};
     /** @internal */
     autoMessageHandler: (participant: IChatParticipant, message: Message) => void = (participant: IChatParticipant, message: Message) => { };
 }
