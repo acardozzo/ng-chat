@@ -1,38 +1,32 @@
-import {
-  Component,
-  Input,
-  OnInit,
-  ViewChildren,
-  QueryList,
-  HostListener,
-  Output,
-  EventEmitter,
-  ViewEncapsulation,
-} from "@angular/core";
 import { HttpClient } from "@angular/common/http";
-
-import { ChatAdapter } from "./core/chat-adapter";
-import { IChatGroupAdapter } from "./core/chat-group-adapter";
-import { User } from "./core/user";
-import { ParticipantResponse } from "./core/participant-response";
-import { Message } from "./core/message";
-import { MessageType } from "./core/message-type.enum";
-import { Window } from "./core/window";
-import { ChatParticipantStatus } from "./core/chat-participant-status.enum";
-import { ScrollDirection } from "./core/scroll-direction.enum";
-import { Localization, StatusDescription } from "./core/localization";
-import { IChatController } from "./core/chat-controller";
-import { PagedHistoryChatAdapter } from "./core/paged-history-chat-adapter";
-import { IFileUploadAdapter } from "./core/file-upload-adapter";
-import { DefaultFileUploadAdapter } from "./core/default-file-upload-adapter";
-import { Theme } from "./core/theme.enum";
-import { IChatOption } from "./core/chat-option";
-import { Group } from "./core/group";
-import { ChatParticipantType } from "./core/chat-participant-type.enum";
-import { IChatParticipant } from "./core/chat-participant";
-import { MessageStatusType } from "./core/message-status";
+import {
+  Component, EventEmitter, HostListener, Input,
+  OnInit, Output, QueryList, ViewChildren, ViewEncapsulation
+} from "@angular/core";
 import { map } from "rxjs/operators";
 import { NgChatWindowComponent } from "./components/ng-chat-window/ng-chat-window.component";
+import { ChatAdapter } from "./core/chat-adapter";
+import { IChatController } from "./core/chat-controller";
+import { IChatGroupAdapter } from "./core/chat-group-adapter";
+import { IChatOption } from "./core/chat-option";
+import { IChatParticipant } from "./core/chat-participant";
+import { ChatParticipantStatus } from "./core/chat-participant-status.enum";
+import { ChatParticipantType } from "./core/chat-participant-type.enum";
+import { DefaultFileUploadAdapter } from "./core/default-file-upload-adapter";
+import { IFileUploadAdapter } from "./core/file-upload-adapter";
+import { Group } from "./core/group";
+import { Localization, StatusDescription } from "./core/localization";
+import { Message } from "./core/message";
+import { MessageStatusType } from "./core/message-status";
+import { MessageType } from "./core/message-type.enum";
+import { PagedHistoryChatAdapter } from "./core/paged-history-chat-adapter";
+import { ParticipantResponse } from "./core/participant-response";
+import { ScrollDirection } from "./core/scroll-direction.enum";
+import { Theme } from "./core/theme.enum";
+import { User } from "./core/user";
+import { Window } from "./core/window";
+import generateMessageId from './utils/generateMessageId';
+
 
 @Component({
   selector: "ng-chat",
@@ -231,7 +225,6 @@ export class NgChat implements OnInit, IChatController {
 
   ngOnInit() {
     this.bootstrapChat();
-
   }
 
   @HostListener("window:resize", ["$event"])
@@ -282,7 +275,8 @@ export class NgChat implements OnInit, IChatController {
           this.updateMessageStatus(participant, msg);
         // this.adapter.addMessageToRoomHandler = (chatId, message) =>
         //   this.addMessageToRoom(chatId, message);
-        this.adapter.autoMessageHandler = (participant, msg) => this.onDispatcherAutoMessage(participant, msg);
+        this.adapter.autoMessageHandler = (participant, msg) =>
+          this.onDispatcherAutoMessage(participant, msg);
         this.adapter.friendsListChangedHandler = (participantsResponse) =>
           this.onFriendsListChanged(participantsResponse);
 
@@ -490,10 +484,13 @@ export class NgChat implements OnInit, IChatController {
     }
   }
   // Handles Programatic Messages
-  private onDispatcherAutoMessage(participant: IChatParticipant, message: Message) {
+  private onDispatcherAutoMessage(
+    participant: IChatParticipant,
+    message: Message
+  ) {
     if (participant && message) {
       const chatWindow = this.openChatWindow(participant);
-
+      message.id = generateMessageId();
       this.assertMessageType(message);
 
       if (!chatWindow[1] || !this.historyEnabled) {
@@ -536,7 +533,7 @@ export class NgChat implements OnInit, IChatController {
         }
       }
 
-      if(message.fromId !== this.userId){
+      if (message.fromId !== this.userId) {
         this.emitMessageSound(chatWindow[0]);
       }
 
@@ -886,12 +883,12 @@ export class NgChat implements OnInit, IChatController {
   }
 
   updateMessageStatus(participant: IChatParticipant, message: Message) {
-    const chatToUpdate = this.windows.find((x) => x.participant.id == participant.id);
+    const chatToUpdate = this.windows.find(
+      (x) => x.participant.id == participant.id
+    );
     if (chatToUpdate) {
       const messageToUpdate = chatToUpdate.messages.find(
-        (item) =>
-          item.dateSent?.getTime() === message.dateSent?.getTime() &&
-          item.message === message.message
+        (item) => item.id === message.id
       );
       if (messageToUpdate) {
         messageToUpdate.status = message.status;

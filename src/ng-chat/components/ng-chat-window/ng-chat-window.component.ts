@@ -1,19 +1,20 @@
-import { Component, Input, Output, EventEmitter, ViewEncapsulation, ViewChild, ElementRef, OnInit, ChangeDetectorRef } from '@angular/core';
-
-import { Message } from "../../core/message";
-import { MessageType } from "../../core/message-type.enum";
-import { Window } from "../../core/window";
-import { ChatParticipantStatus } from "../../core/chat-participant-status.enum";
-import { ScrollDirection } from "../../core/scroll-direction.enum";
-import { Localization } from '../../core/localization';
-import { IFileUploadAdapter } from '../../core/file-upload-adapter';
+import { Component, ElementRef, EventEmitter, Input, Output, ViewChild, ViewEncapsulation } from '@angular/core';
 import { IChatOption } from '../../core/chat-option';
-import { Group } from "../../core/group";
-import { ChatParticipantType } from "../../core/chat-participant-type.enum";
 import { IChatParticipant } from "../../core/chat-participant";
-import { MessageCounter } from "../../core/message-counter";
 import { chatParticipantStatusDescriptor } from '../../core/chat-participant-status-descriptor';
+import { ChatParticipantStatus } from "../../core/chat-participant-status.enum";
+import { ChatParticipantType } from "../../core/chat-participant-type.enum";
+import { IFileUploadAdapter } from '../../core/file-upload-adapter';
+import { Group } from "../../core/group";
+import { Localization } from '../../core/localization';
+import { Message } from "../../core/message";
+import { MessageCounter } from "../../core/message-counter";
 import { MessageStatusType } from '../../core/message-status';
+import { MessageType } from "../../core/message-type.enum";
+import { ScrollDirection } from "../../core/scroll-direction.enum";
+import { Window } from "../../core/window";
+import generateMessageId from '../../utils/generateMessageId';
+
 
 @Component({
     selector: 'ng-chat-window',
@@ -242,7 +243,7 @@ export class NgChatWindowComponent {
                    message.toId = window.participant.id;
                    message.message = window.newMessage;
                    message.dateSent = new Date();
-       
+                    message.id = generateMessageId();
                    window.messages.push(message);
        
                    this.onMessageSent.emit(message);
@@ -321,4 +322,5 @@ export class NgChatWindowComponent {
     onRequestResendMessage(message: Message) {
         this.onResendMessage.emit(message);
     }
+
 }
