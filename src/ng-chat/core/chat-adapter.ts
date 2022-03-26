@@ -35,6 +35,9 @@ export abstract class ChatAdapter
     {
         this.addMessageToRoomHandler(chatId, message);
     }
+    public onDispatcherMessage(participant: IChatParticipant, message: Message): void {
+        this.autoMessageHandler(participant, message);
+    }
     // Event handlers
     /** @internal */
     friendsListChangedHandler: (participantsResponse: ParticipantResponse[]) => void  = (participantsResponse: ParticipantResponse[]) => {};
@@ -44,4 +47,6 @@ export abstract class ChatAdapter
     updateMessageStatusHandler: (chatId: string, message: Message) => void = (chatId, message) => {};
     /** @internal */
     addMessageToRoomHandler: (chatId: string, message: Message) => void = (chatId, message) => {};
+    /** @internal */
+    autoMessageHandler: (participant: IChatParticipant, message: Message) => void = (participant: IChatParticipant, message: Message) => { };
 }
