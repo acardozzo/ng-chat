@@ -278,10 +278,11 @@ export class NgChat implements OnInit, IChatController {
         // Binding event listeners
         this.adapter.messageReceivedHandler = (participant, msg) =>
           this.onMessageReceived(participant, msg);
-        this.adapter.updateMessageStatusHandler = (chatId, message) =>
-          this.updateMessageStatus(chatId, message);
+        this.adapter.updateMessageStatusHandler = (participant, msg) =>
+          this.updateMessageStatus(participant, msg);
         // this.adapter.addMessageToRoomHandler = (chatId, message) =>
         //   this.addMessageToRoom(chatId, message);
+        this.adapter.autoMessageHandler = (participant, msg) => this.onDispatcherAutoMessage(participant, msg);
         this.adapter.friendsListChangedHandler = (participantsResponse) =>
           this.onFriendsListChanged(participantsResponse);
 
@@ -486,6 +487,35 @@ export class NgChat implements OnInit, IChatController {
       );
 
       this.participantsInteractedWith = [];
+    }
+  }
+  // Handles Programatic Messages
+  private onDispatcherAutoMessage(participant: IChatParticipant, message: Message) {
+    if (participant && message) {
+      const chatWindow = this.openChatWindow(participant);
+
+      this.assertMessageType(message);
+
+      if (!chatWindow[1] || !this.historyEnabled) {
+        chatWindow[0].messages.push(message);
+
+        this.scrollChatWindow(chatWindow[0], ScrollDirection.Bottom);
+
+        if (chatWindow[0].hasFocus) {
+          this.markMessagesAsRead([message]);
+        }
+      }
+
+      //TODO: Verificar se o formato da mensagem está correto
+      this.adapter.sendMessage(message);
+      // this.emitMessageSound(chatWindow[0]);
+
+      // Github issue #58
+      // Do not push browser notifications with message content for privacy purposes if the 'maximizeWindowOnNewMessage' setting is off and this is a new chat window.
+      // if (this.maximizeWindowOnNewMessage || (!chatWindow[1] && !chatWindow[0].isCollapsed)) {
+      //     // Some messages are not pushed because they are loaded by fetching the history hence why we supply the message here
+      //     this.emitBrowserNotification(chatWindow[0], message);
+      // }
     }
   }
 
@@ -855,8 +885,8 @@ export class NgChat implements OnInit, IChatController {
     this.adapter.sendMessage(message);
   }
 
-  updateMessageStatus(chatId: string, message: Message) {
-    const chatToUpdate = this.windows.find((x) => x.participant.id == chatId);
+  updateMessageStatus(participant: IChatParticipant, message: Message) {
+    const chatToUpdate = this.windows.find((x) => x.participant.id == participant.id);
     if (chatToUpdate) {
       const messageToUpdate = chatToUpdate.messages.find(
         (item) =>
