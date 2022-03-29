@@ -883,16 +883,39 @@ export class NgChat implements OnInit, IChatController {
   }
 
   updateMessageStatus(participant: IChatParticipant, message: Message) {
-    const chatToUpdate = this.windows.find(
-      (x) => x.participant.id == participant.id
-    );
-    if (chatToUpdate) {
-      const messageToUpdate = chatToUpdate.messages.find(
-        (item) => item.id === message.id
-      );
-      if (messageToUpdate) {
-        messageToUpdate.status = message.status;
+
+    if (participant && message) {
+      const chatWindow = this.openChatWindow(participant);
+      // message.id = generateMessageId();
+      this.assertMessageType(message);
+
+      if (!chatWindow[1] || !this.historyEnabled) {
+        // chatWindow[0].messages.push(message);
+        const idx = chatWindow[0].messages.findIndex((msg) => msg.id === message.id);
+        if (idx > -1) {
+          chatWindow[0].messages[idx].status = message.status;
+        }
+        
+        this.scrollChatWindow(chatWindow[0], ScrollDirection.Bottom);
+
+        if (chatWindow[0].hasFocus) {
+          this.markMessagesAsRead([message]);
+        }
       }
+
+      // this.adapter.sendMessage(message);
     }
+
+    // const chatToUpdate = this.windows.find(
+    //   (x) => x.participant.id == participant.id
+    // );
+    // if (chatToUpdate) {
+    //   const messageToUpdate = chatToUpdate.messages.find(
+    //     (item) => item.id === message.id
+    //   );
+    //   if (messageToUpdate) {
+    //     messageToUpdate.status = message.status;
+    //   }
+    // }
   }
 }
